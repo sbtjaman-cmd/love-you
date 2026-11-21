@@ -1,0 +1,98 @@
+/* Midnight navy · champagne gold · soft teal — no pink */
+:root{
+  --gold:#ecd9a8;
+  --serif:'Cormorant Garamond','Iowan Old Style',Georgia,serif;
+  --sans:'Manrope','Helvetica Neue',Arial,sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+body{
+  min-height:100dvh; overflow:hidden; color:var(--gold); font-family:var(--sans);
+  background:radial-gradient(ellipse 80% 60% at 50% 40%, #16304d 0%, #0c1a2b 55%, #060d16 100%);
+  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent;
+}
+body::after{                      /* soft vignette */
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(3,8,14,.55) 100%);
+}
+#scene{ position:fixed; inset:0; width:100%; height:100%; display:block; animation:fade 1.6s ease both; }
+
+.hero{
+  position:fixed; inset:0; z-index:2; pointer-events:none; text-align:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  gap:clamp(10px, 2vh, 18px);
+  padding:0 20px calc(env(safe-area-inset-bottom, 0px) + clamp(36px, 12vh, 120px));
+}
+
+/* headline: letters rise in, then a glint travels through; the o's keep waving */
+.line{
+  font-family:var(--serif); font-style:italic; font-weight:500;
+  font-size:clamp(28px, 6.4vw, 54px); line-height:1.15;
+  display:flex; flex-wrap:wrap; justify-content:center; column-gap:.3em;
+}
+.w{ display:inline-block; white-space:nowrap; }
+.ch{
+  display:inline-block; color:var(--gold);
+  opacity:0; transform:translateY(.7em) scale(.92); filter:blur(10px);
+  animation:
+    rise 1.1s cubic-bezier(.2,.7,.2,1) calc(1.1s + var(--i) * 60ms) forwards,
+    glint 5.2s ease-in-out calc(3.6s + var(--i) * 110ms) infinite;
+}
+.ch.o{
+  animation:
+    rise 1.1s cubic-bezier(.2,.7,.2,1) calc(1.1s + var(--i) * 60ms) forwards,
+    glint 5.2s ease-in-out calc(3.6s + var(--i) * 110ms) infinite,
+    wave 2s ease-in-out calc(3.4s + var(--k) * 160ms) infinite;
+}
+@keyframes rise{ to{ opacity:1; transform:none; filter:blur(0); } }
+@keyframes glint{
+  0%,55%,100%{ color:var(--gold); text-shadow:0 0 0 rgba(236,217,168,0); }
+  25%{ color:#fff8e3; text-shadow:0 0 22px rgba(236,217,168,.6); }
+}
+@keyframes wave{
+  0%,100%{ transform:translateY(0) scale(1); }
+  50%{ transform:translateY(-.1em) scale(1.28,.92); }
+}
+
+.sub{
+  display:flex; align-items:center; gap:14px;
+  font-size:11px; font-weight:300; letter-spacing:.46em; text-transform:uppercase;
+  color:rgba(236,217,168,.72); opacity:0; animation:fade 1.4s ease 3.4s forwards;
+}
+.sub::before,.sub::after{
+  content:''; width:clamp(28px, 8vw, 56px); height:1px;
+  background:linear-gradient(90deg, transparent, rgba(236,217,168,.7));
+}
+.sub::after{ transform:scaleX(-1); }
+
+@keyframes fade{ from{ opacity:0; } to{ opacity:1; } }
+
+@media (prefers-reduced-motion: reduce){
+  .ch,.ch.o{ animation:none; opacity:1; transform:none; filter:none; }
+  .sub{ animation:none; opacity:1; }
+  #scene{ animation:none; }
+}
+
+/* the name: its own line, a touch brighter, with a small beating heart */
+.brk{ flex-basis:100%; height:0; }
+.nm{ margin-top:.06em; }
+.nm .ch{
+  font-size:1.2em; letter-spacing:.05em; color:#fff1c9;
+  animation:
+    rise 1.1s cubic-bezier(.2,.7,.2,1) calc(1.1s + var(--i) * 60ms) forwards,
+    glintNm 5.2s ease-in-out calc(3.6s + var(--i) * 110ms) infinite;
+}
+.nm::after{
+  content:'\2665\FE0E'; display:inline-block; margin-left:.32em; vertical-align:.95em;
+  font-size:.4em; font-style:normal; color:var(--gold); opacity:0;
+  animation:fade 1s ease 3.2s forwards, pulse 1.7s ease-in-out 4.2s infinite;
+}
+@keyframes glintNm{
+  0%,55%,100%{ color:#fff1c9; text-shadow:0 0 14px rgba(236,217,168,.35); }
+  25%{ color:#fffdf2; text-shadow:0 0 26px rgba(255,240,200,.85); }
+}
+@keyframes pulse{ 0%,100%{ transform:scale(1); } 14%{ transform:scale(1.4); } 28%{ transform:scale(1); } 42%{ transform:scale(1.22); } }
+@media (prefers-reduced-motion: reduce){
+  .nm .ch{ animation:none; opacity:1; transform:none; filter:none; }
+  .nm::after{ animation:none; opacity:1; }
+}
